@@ -15,13 +15,11 @@ end
 
 # store <username> 
 screen_name =  String.new ARGV[0]
-data =[]
 
 # collect last 200 tweets and store them as <username>_timeline.csv
 timeline = Twitter.user_timeline(screen_name, :count => 200)
-timeline.each do |t|
-	data << t.text
-end
+data = timeline.map { |t| t.text}
+
 CSV.open("#{screen_name}_timeline.csv", 'w') do |csv|
 	csv << data
 end
