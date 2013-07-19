@@ -6,7 +6,7 @@ library(SnowballC)
 library(wordcloud)
 
 
-# pass username as argv using $ Rscript tm_timeline.r 'argv <- "username"'
+# pass username as argv using $ Rscript twitter_timeline.r 'argv <- "username"'
 eval(parse(text = rev(commandArgs())[1]))
 # argv <- "ReutersScience" # debug line
 
