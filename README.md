@@ -1,4 +1,4 @@
-Use Ruby and R generate a word cloud of a users last 200 tweets.
+Use Ruby and R to generate a word cloud of a users last 200 tweets.
 
 ## Package Requirements
     
@@ -34,7 +34,7 @@ end
 
 To run:
 ```ruby
-timeline.rb <username>
+ito_miner.rb <username>
 ```
 
-A PDF will be generated as <username>_timeline.pdf
+A PDF will be generated as \<username>_timeline.pdf
