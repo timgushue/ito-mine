@@ -56,7 +56,7 @@ wordFreq <- sort(rowSums(m), decreasing=TRUE)
 set.seed(375) # to make it reproducible
 grayLevels <- gray( (wordFreq+10) / (max(wordFreq)+10) )
 pdf(paste( c(fileStub, ".pdf"), collapse = ""))
-wordcloud(words=names(wordFreq), freq=wordFreq, scale=c(4,.5), min.freq=4, random.order=F, colors=grayLevels)
+wordcloud(words=names(wordFreq), freq=wordFreq, scale=c(4,.5), min.freq=3, random.order=F, colors=grayLevels)
 dev.off()
 
 
