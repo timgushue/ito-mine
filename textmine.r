@@ -1,3 +1,9 @@
+# This is a temporary patch to prevent crashing caused by 
+# stemming non-english words.  
+# Takes twitter username as an argument and reads CSV files.
+# A wordcloud is produced from frequently ( > 4) used terms.
+
+
 library(methods)
 library(Rcpp)
 library(RColorBrewer)
@@ -6,12 +12,12 @@ library(SnowballC)
 library(wordcloud)
 
 
-# pass username as argv using $ Rscript twitter_timeline.r 'argv <- "username"'
-eval(parse(text = rev(commandArgs())[1]))
-# argv <- "ReutersScience" # debug line
+# pass username as a string using $ `R CMD BATCH ... `
+argv <- commandArgs(TRUE)
+username <- parse(text = argv[1])
 
 # import csv to data frame (using argv)
-fileStub  <- paste( c(argv, "_timeline"), collapse = "")
+fileStub  <- paste( c(username, "_timeline"), collapse = "")
 tweets    <- read.csv( paste( c(fileStub, ".csv"), collapse = ""), header=FALSE, sep=",")
 tweets_df <- do.call("cbind", lapply(tweets, as.data.frame))
 
@@ -32,9 +38,10 @@ twitterStopwords <- c(stopwords('english'), "rt", "via")
 tCorpus <- tm_map(tCorpus, removeWords, twitterStopwords)
 
 # stem and complete with dictionary 
-tCorpusCopy <- tCorpus
-tCorpus <- tm_map(tCorpus, stemDocument, language="english")
-tCorpus <- tm_map(tCorpus, stemCompletion, dictionary=tCorpusCopy)
+# 
+#tCorpusCopy <- tCorpus
+#tCorpus <- tm_map(tCorpus, stemDocument, language="english")
+#tCorpus <- tm_map(tCorpus, stemCompletion, dictionary=tCorpusCopy)
 
 # build term document matrix
 tdm <- TermDocumentMatrix(tCorpus) 
@@ -48,8 +55,8 @@ wordFreq <- sort(rowSums(m), decreasing=TRUE)
 # create a word cloud
 set.seed(375) # to make it reproducible
 grayLevels <- gray( (wordFreq+10) / (max(wordFreq)+10) )
-pdf( paste( c(fileStub, ".pdf"), collapse = ""))
-wordcloud(words=names(wordFreq), freq=wordFreq, scale=c(4,.5), min.freq=3, random.order=F, colors=grayLevels)
-
+pdf(paste( c(fileStub, ".pdf"), collapse = ""))
+wordcloud(words=names(wordFreq), freq=wordFreq, scale=c(4,.5), min.freq=4, random.order=F, colors=grayLevels)
+dev.off()
 
 
